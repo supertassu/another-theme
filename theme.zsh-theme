@@ -1,6 +1,8 @@
 #!/usr/bin/env zsh
+PROMPT="%B%F{red}%n%f%b"
+[[ -v SSH_CLIENT ]] && PROMPT+="%F{red}@%m%f"
 
-PROMPT='%B%F{red}%n%f%b %F{gray}in%f %F{cyan}%c%f %F{white}»%f '
+PROMPT+=' %F{gray}in%f %F{cyan}%c%f %F{white}»%f '
 
 prompt_set_title() {
     setopt localoptions noshwordsplit
