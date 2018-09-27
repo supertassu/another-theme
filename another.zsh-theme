@@ -1,8 +1,4 @@
 #!/usr/bin/env zsh
-PROMPT="%B%F{red}%n%f%b"
-[[ -v SSH_CLIENT ]] && PROMPT+="%F{red}@%m%f"
-
-PROMPT+=' %F{gray}in%f %F{cyan}%c%f %F{white}»%f '
 
 prompt_set_title() {
     setopt localoptions noshwordsplit
@@ -34,8 +30,36 @@ prompt_preexec() {
   prompt_set_title 'ignore-escape' "$PWD:t: $2"
 }
 
-autoload -U colors && colors
+prompt_get_pwd() {
+    git remote &> /dev/null
+    if [ $? -eq 0 ]; then
+        echo "%c"
+    else
+        echo "%~"
+    fi
+}
 
-add-zsh-hook precmd prompt_precmd
-add-zsh-hook preexec prompt_preexec
+prompt_git_status() {
+    git remote &> /dev/null
 
+    if [ $? -eq 0 ]; then
+        ref=$(git symbolic-ref HEAD | cut -d'/' -f3)
+        echo " %F{yellow}$ref%f"
+    fi
+
+}
+
+prompt_setup() {
+    autoload -U colors && colors
+    setopt PROMPT_SUBST
+
+    add-zsh-hook precmd prompt_precmd
+    add-zsh-hook preexec prompt_preexec
+
+    PROMPT="%B%F{magenta}%n%f%b"
+    [[ -v SSH_CLIENT ]] && PROMPT+="%F{magenta}@%m%f"
+    
+    PROMPT+=' %F{gray}in%f %F{cyan}$(prompt_get_pwd)%f$(prompt_git_status) %F{white}»%f '
+}
+
+prompt_setup

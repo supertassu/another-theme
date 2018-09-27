@@ -1,6 +1,6 @@
 # Just another ZSH theme
 
-![Screenshot](https://i.imgur.com/ezqq7XG.png)
+![Screenshot](demo.png)
 
 ```shell
 # .zshrc
